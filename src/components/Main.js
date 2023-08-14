@@ -13,6 +13,25 @@ export default class Main extends Component {
         index: -1,
     };
 
+    componentDidMount() {
+        const tarefas = JSON.parse(localStorage.getItem('tarefas'));
+        if (tarefas) {
+            this.setState({
+                tarefas
+            })
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const {tarefas} = this.state;
+
+        if (tarefas === prevState.tarefas) {
+            return;
+        }
+
+        localStorage.setItem('tarefas', JSON.stringify(tarefas));
+    }
+
     handleInputChange = (event) => {
         this.setState({
             novaTarefa: event.target.value,
@@ -25,7 +44,9 @@ export default class Main extends Component {
         let {novaTarefa} = this.state;
         novaTarefa = novaTarefa.trim();
 
-        if(tarefas.indexOf(novaTarefa) !== -1) return;
+        if(tarefas.indexOf(novaTarefa) !== -1) {
+            return;
+        }
 
         const novasTarefas = [...tarefas];
 
